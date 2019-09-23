@@ -1,16 +1,16 @@
 const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
-const words = ['lettuce', 'mouse', 'pillow', 'cos', 'something', 'anything'];
+const words = ['lettuce', 'mouse', 'pillow', 'blueberry', 'chair', 'bottle', 'madrid', 'turtle', 'start', 'oxygen', 'mother', 'computer', 'football', 'blood', 'winner', 'shark', 'shopping', 'warsaw'];
 const alphabetDiv = document.querySelector('.alphabet');
 const wrapperAllWord = document.querySelector('.wrapper .word');
-
-const numberSpan = document.querySelector('.livesNumber');
+const resultDiv = document.querySelector('.result');
 const newGameBtn = document.querySelector('.newGame');
 
 
-let word = '';
+let Word = '';
 let color = '';
-let counter = 10;
+let livesNumber = 10;
+let counter = 0;
 
 function renderWord() {
     let number = Math.floor(Math.random() * words.length);
@@ -40,10 +40,10 @@ function createAlphabetList() {
 
 function createGuessWordSign() {
     for (let i = 0; i < word.length; i++) {
-        let span = document.createElement('span');
-        span.classList.add('guessChar')
-        span.textContent = '';
-        wrapperAllWord.appendChild(span);
+        let liList = document.createElement('li');
+        liList.classList.add('guessChar')
+        liList.textContent = '';
+        wrapperAllWord.appendChild(liList);
     }
 }
 
@@ -59,9 +59,9 @@ letters.forEach((letter, index) => {
     letter.addEventListener('click', function (e) {
         e.preventDefault();
         if (includeChecker(word, index)) {
-            this.style.backgroundColor = 'green';
+            this.style.backgroundColor = '#B0C38D';
         } else {
-            this.style.backgroundColor = 'red';
+            this.style.backgroundColor = '#D35B3F';
         }
         this.style.cursor = 'default';
         getIndexOfGuessChar(index);
@@ -77,30 +77,46 @@ function includeChecker(word, index) {
         return false;
     }
 }
-let guessSpan = document.querySelectorAll('.guessChar');
+let guessLi = document.querySelectorAll('.guessChar');
 
 function letterChecker(index) {
+    let guessLi = document.querySelectorAll('.guessChar');
     if (includeChecker(word, index)) {
         for (let i = 0; i < word.length; i++) {
             if (word[i] === (alphabet[getIndexOfGuessChar(index)])) {
-                guessSpan[i].textContent = word[i];
+                guessLi[i].textContent = word[i];
+                counter++;
             }
         }
     } else {
-        counter--;
+        livesNumber--;
     }
-    numberSpan.textContent = `${counter}`;
+    resultDiv.textContent = `You have ${livesNumber} lives.`;
+    getResult();
+}
+
+function endGame() {
+    livesNumber = 10;
+    counter = 0;
+    resultDiv.textContent = `You have 10 lives.`;
+}
+
+function getResult() {
+    if (livesNumber < 1) {
+        resultDiv.textContent = 'Game over!';
+        
+    } else if (counter === word.length) {
+        resultDiv.textContent = 'You are winner!';
+    }
 }
 
 newGameBtn.addEventListener('click', startAgain);
 
 function startAgain() {
-    numberSpan.textContent = '10';
-    guessSpan.forEach(span => span.textContent = '');
-    wrapperAllWord.innerHTML = "";
+    endGame();
+    letters.forEach(letter => letter.style.backgroundColor = '#31595E');
+    guessLi.forEach(span => span.textContent = '');
+    wrapperAllWord.innerHTML = '';
     renderWord();
     createGuessWordSign();
-    // letterChecker();
-    letters.forEach(letter => letter.style.backgroundColor = "bisque");
-
 }
