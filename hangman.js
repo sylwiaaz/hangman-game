@@ -1,10 +1,11 @@
 const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
-const words = ['lettuce', 'mouse', 'pillow', 'dirty dancing', 'cos', 'something', 'anything'];
+const words = ['lettuce', 'mouse', 'pillow', 'cos', 'something', 'anything'];
 const alphabetDiv = document.querySelector('.alphabet');
 const wrapperAllWord = document.querySelector('.wrapper .word');
 
 const numberSpan = document.querySelector('.livesNumber');
+const newGameBtn = document.querySelector('.newGame');
 
 
 let word = '';
@@ -30,7 +31,7 @@ function createAlphabetList() {
     let ulList = document.createElement('ul');
     alphabet.forEach(char => {
         let letter = document.createElement('li');
-        letter.classList.add('guessChar');
+        letter.classList.add('char');
         letter.textContent = char;
         ulList.appendChild(letter);
     });
@@ -40,13 +41,11 @@ function createAlphabetList() {
 function createGuessWordSign() {
     for (let i = 0; i < word.length; i++) {
         let span = document.createElement('span');
+        span.classList.add('guessChar')
         span.textContent = '';
         wrapperAllWord.appendChild(span);
     }
 }
-
-
-
 
 function getIndexOfGuessChar(index) {
     let indexChar = 0;
@@ -54,7 +53,7 @@ function getIndexOfGuessChar(index) {
     return indexChar;
 }
 
-const letters = document.querySelectorAll('.guessChar');
+const letters = document.querySelectorAll('.char');
 
 letters.forEach((letter, index) => {
     letter.addEventListener('click', function (e) {
@@ -77,20 +76,31 @@ function includeChecker(word, index) {
     } else {
         return false;
     }
-
 }
+let guessSpan = document.querySelectorAll('.guessChar');
 
 function letterChecker(index) {
-    let span = document.querySelectorAll('span');
     if (includeChecker(word, index)) {
         for (let i = 0; i < word.length; i++) {
             if (word[i] === (alphabet[getIndexOfGuessChar(index)])) {
-                span[i].textContent = word[i];
+                guessSpan[i].textContent = word[i];
             }
         }
     } else {
         counter--;
-
     }
     numberSpan.textContent = `${counter}`;
+}
+
+newGameBtn.addEventListener('click', startAgain);
+
+function startAgain() {
+    numberSpan.textContent = '10';
+    guessSpan.forEach(span => span.textContent = '');
+    wrapperAllWord.innerHTML = "";
+    renderWord();
+    createGuessWordSign();
+    // letterChecker();
+    letters.forEach(letter => letter.style.backgroundColor = "bisque");
+
 }
