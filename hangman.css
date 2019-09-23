@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.alphabet ul {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    flex-wrap: wrap;
+    width: 80%;
+    margin: 0 auto;
+}
+
+
+.alphabet ul li {
+    width: 40px;
+    height: 40px;
+    background-color: bisque;
+    border-radius: 5px;
+    margin: 10px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+
+}
+
+.alphabet ul li:hover {
+    background-color: darkgrey;
+}
+
+.wrapper {
+    margin: 80px auto;
+    width: 60%;
+    text-align: center;
+}
+
+.wrapper .word span {
+    font-size: 20px;
+    margin: 0 15px;
+    padding: 5px;
+    position: relative;
+    /* opacity: 0; */
+    
+}
+
+.word span::after {
+    content: '';
+    position: absolute;
+    bottom: 0%;
+    left: 0%;
+    width: 25px;
+    height: 2px;
+    background-color: black;
+}
