@@ -11,7 +11,7 @@ body {
 }
 
 .container h1 {
-    margin: 40px 20px;
+    margin: 30px 20px;
     text-align: center;
 }
 
@@ -20,7 +20,7 @@ body {
     flex-direction: row;
     list-style-type: none;
     flex-wrap: wrap;
-    width: 80%;
+    width: 85%;
     margin: 0 auto;
 }
 
@@ -36,7 +36,6 @@ body {
     text-align: center;
     cursor: pointer;
     font-size: 20px;
-
 }
 
 .char:hover {
@@ -87,32 +86,59 @@ body {
 .resultWrapper {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     width: 100%;
 }
 
-.result {
-    text-align: center;
+.column {
+    flex-basis: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.result,
+.hint {
+    text-align: left;
     font-size: 20px;
-    flex-basis: 60%;
-    margin-top: 10px;
+    flex-basis: 70%;
+    margin-top: 15px;
 }
 
 .livesNumber {
     font-weight: bold;
 }
 
-.newGame {
+.newGame,
+.showHint {
     font-size: 20px;
     padding: 10px 15px;
     border-radius: 10px;
     border: none;
-    min-width: 150px;
-    margin: 0 0 20px 0;
+    width: 150px;
+    margin: 10px auto;
     background-color: #31595E;
     cursor: pointer;
 }
 
-.newGame:hover {
+.newGame:hover,
+.showHint:hover {
     background-color: #609aa1;
+}
+
+@media (max-width: 990px) {
+    .char {
+        margin: 5px;
+    }
+
+    .column:nth-child(1) {
+        flex-basis: 90%;
+        flex-direction: row;
+    }
+
+    .column:nth-child(2) {
+        flex-direction: column;
+        flex-basis: 80%;
+        margin: 10px auto 20px;
+    }
 }
