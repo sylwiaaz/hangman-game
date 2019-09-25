@@ -93,11 +93,36 @@ const words = [{
         name: 'warsaw',
         category: 'european capitals',
         hint: 'the capital city of Poland'
+    },
+    {
+        name: 'dictionary',
+        category: 'kind of book',
+        hint: 'a book that contains a list of words in alphabetical order with their meanings explained or written in another language'
+    },
+    {
+        name: 'elephant',
+        category: 'animals',
+        hint: 'a very large, grey animal with big ears and a very long nose'
+    },
+    {
+        name: 'germany',
+        category: 'countries',
+        hint: 'a country in central Europe'
+    },
+    {
+        name: 'saturday',
+        category: 'days of the week ',
+        hint: 'the day of the week after Friday and before Sunday'
+    },
+    {
+        name: 'cauliflower',
+        category: 'vegetables',
+        hint: 'a large, round, white vegetable'
     }
 ];
 
 const alphabetDiv = document.querySelector('.alphabet');
-const wrapperAllWord = document.querySelector('.wrapper .word');
+const wrapperAllWord = document.querySelector('.word');
 const resultDiv = document.querySelector('.result');
 const newGameBtn = document.querySelector('.newGame');
 const categorySpan = document.querySelector('.categorySpan');
@@ -105,35 +130,10 @@ const showHintBtn = document.querySelector('.showHint');
 const hintDiv = document.querySelector('.hint');
 
 let word = '';
-let color = '';
 let livesNumber = 10;
 let counter = 0;
-let lastNumber = 0;
 
-function renderNumber() {
-    let number = Math.floor(Math.random() * words.length);
-    return number;
-}
-
-function displayWord() {
-    number = renderNumber();
-    word = words[number].name;
-    categorySpan.textContent = words[number].category;
-    return word;
-}
-displayWord();
-
-function start() {
-    createAlphabetList();
-    createGuessWordSign();
-}
-start();
-// console.log(word, number);
-showHintBtn.addEventListener('click', showHint);
-
-function showHint() {
-    hintDiv.textContent = `Your hint:   ${words[number].hint}  `;
-}
+window.onload = start();
 
 function createAlphabetList() {
     let ulList = document.createElement('ul');
@@ -146,13 +146,36 @@ function createAlphabetList() {
     alphabetDiv.appendChild(ulList);
 }
 
+function renderNumber() {
+    let number = Math.floor(Math.random() * words.length);
+    return number;
+}
+
+function getWord() {
+    number = renderNumber();
+    word = words[number].name;
+    categorySpan.textContent = words[number].category;
+    console.log(word);
+    return word;
+}
+
 function createGuessWordSign() {
     for (let i = 0; i < word.length; i++) {
-        let liList = document.createElement('li');
+        const liList = document.createElement('li');
         liList.classList.add('guessChar')
         liList.textContent = '';
         wrapperAllWord.appendChild(liList);
     }
+}
+
+function start() {
+    createAlphabetList();
+    getWord();
+    createGuessWordSign();
+}
+
+function includeChecker(index) {
+    return word.includes(alphabet[getIndexOfGuessChar(index)]) ? true : false;
 }
 
 function getIndexOfGuessChar(index) {
@@ -161,33 +184,11 @@ function getIndexOfGuessChar(index) {
     return indexChar;
 }
 
-const letters = document.querySelectorAll('.char');
-letters.forEach((letter, index) => {
-    letter.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (includeChecker(word, index)) {
-            this.style.backgroundColor = '#83975c';
-        } else {
-            this.style.backgroundColor = '#D35B3F';
-        }
-        this.style.cursor = 'default';
-        getIndexOfGuessChar(index);
-        letterChecker(index);
-    });
-});
-
-function includeChecker(word, index) {
-    if (word.includes(alphabet[getIndexOfGuessChar(index)])) {
-        return true;
-    } else {
-        return false;
-    }
-}
-let guessLi = document.querySelectorAll('.guessChar');
+const guessLi = document.querySelectorAll('.guessChar');
 
 function letterChecker(index) {
     let guessLi = document.querySelectorAll('.guessChar');
-    if (includeChecker(word, index)) {
+    if (includeChecker(index)) {
         for (let i = 0; i < word.length; i++) {
             if (word[i] === (alphabet[getIndexOfGuessChar(index)])) {
                 guessLi[i].textContent = word[i];
@@ -197,7 +198,7 @@ function letterChecker(index) {
     } else {
         livesNumber--;
     }
-    resultDiv.textContent = `You have  ${livesNumber}  lives.`;
+    resultDiv.textContent = `You have ${livesNumber} lives.`;
     getResult();
 }
 
@@ -216,6 +217,22 @@ function getResult() {
     }
 }
 
+const letters = document.querySelectorAll('.char');
+letters.forEach((letter, index) => {
+    letter.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (includeChecker(index)) {
+            this.style.backgroundColor = '#83975c';
+        } else {
+            this.style.backgroundColor = '#D35B3F';
+        }
+        this.style.cursor = 'default';
+        getIndexOfGuessChar(index);
+        letterChecker(index);
+    });
+});
+
+
 newGameBtn.addEventListener('click', startAgain);
 
 function startAgain() {
@@ -227,6 +244,12 @@ function startAgain() {
     guessLi.forEach(span => span.textContent = '');
     wrapperAllWord.innerHTML = '';
     hintDiv.textContent = 'Your hint: ';
-    displayWord();
+    getWord();
     createGuessWordSign();
+}
+
+showHintBtn.addEventListener('click', showHint);
+
+function showHint() {
+    hintDiv.textContent = `Your hint: ${words[number].hint}`;
 }
